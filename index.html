@@ -19,17 +19,17 @@
         <header class="flex flex-col md:flex-row justify-between items-center bg-white p-5 rounded-xl shadow-sm border border-slate-100">
             <div>
                 <h1 class="text-2xl font-bold text-slate-800">Dashboard de Andaimes</h1>
-                <p class="text-sm text-slate-500 mt-1">Acompanhamento de produtividade e efetivo</p>
+                <p class="text-sm text-slate-500 mt-1">Acompanhamento avançado de produtividade e efetivo</p>
             </div>
-            <div id="status" class="mt-4 md:mt-0 px-4 py-2 bg-slate-100 text-slate-600 rounded-full text-sm font-semibold flex items-center gap-2">
+            <div id="status" class="mt-4 md:mt-0 px-4 py-2 bg-slate-100 text-slate-600 rounded-full text-sm font-semibold">
                 Carregando dados...
             </div>
         </header>
 
-        <!-- Cards de KPIs -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-5" id="kpi-container">
+        <!-- Cards de KPIs (Linha 1) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-blue-500">
-                <h3 class="text-sm font-medium text-slate-500">Efetivo (Presenças)</h3>
+                <h3 class="text-sm font-medium text-slate-500">Efetivo Acumulado (Presenças)</h3>
                 <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-presenca">-</p>
             </div>
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-indigo-500">
@@ -37,26 +37,62 @@
                 <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-hh">-</p>
             </div>
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-green-500">
-                <h3 class="text-sm font-medium text-slate-500">Montagem (m)</h3>
+                <h3 class="text-sm font-medium text-slate-500">Montagem Total (m)</h3>
                 <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-montagem">-</p>
             </div>
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-orange-500">
-                <h3 class="text-sm font-medium text-slate-500">Desmontagem (m)</h3>
+                <h3 class="text-sm font-medium text-slate-500">Desmontagem Total (m)</h3>
                 <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-desmontagem">-</p>
-            </div>
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-red-500">
-                <h3 class="text-sm font-medium text-slate-500">STD Médio</h3>
-                <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-std">-</p>
             </div>
         </div>
 
-        <!-- Área do Gráfico com altura fixa definida -->
+        <!-- Cards de KPIs Avançados (Linha 2) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-red-500">
+                <h3 class="text-sm font-medium text-slate-500">STD Médio (HH / m)</h3>
+                <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-std">-</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-emerald-500">
+                <h3 class="text-sm font-medium text-slate-500">Média Montagem / Homem / Dia</h3>
+                <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-media-montagem">-</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-amber-500">
+                <h3 class="text-sm font-medium text-slate-500">Média Desmontagem / Homem / Dia</h3>
+                <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-media-desmontagem">-</p>
+            </div>
+        </div>
+
+        <!-- Área do Gráfico -->
         <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100">
-            <h2 class="text-lg font-bold text-slate-800 mb-4">Produção Diária</h2>
-            <div class="relative h-[350px] w-full">
+            <h2 class="text-lg font-bold text-slate-800 mb-4">Evolução da Produção Diária</h2>
+            <div class="relative h-[380px] w-full">
                 <canvas id="meuGrafico"></canvas>
             </div>
         </div>
+
+        <!-- Prévia da Planilha (Tabela) -->
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-slate-800">Prévia dos Dados da Planilha</h2>
+                <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-medium" id="total-registros">0 registros</span>
+            </div>
+            <div class="overflow-x-auto max-h-[400px]">
+                <table class="w-full text-left border-collapse" id="tabela-dados">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 text-xs uppercase tracking-wider sticky top-0">
+                            <th class="p-3 border-b">Data</th>
+                            <th class="p-3 border-b">Presentes</th>
+                            <th class="p-3 border-b">Montagem (m)</th>
+                            <th class="p-3 border-b">Desmontagem (m)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm divide-y divide-slate-100">
+                        <!-- Preenchido via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -74,6 +110,7 @@
                 
                 processarKPIs(data);
                 gerarGrafico(data);
+                preencherTabela(data);
                 
                 statusBadge.innerText = "Dados atualizados!";
                 statusBadge.className = "mt-4 md:mt-0 px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-semibold";
@@ -86,6 +123,7 @@
 
         function processarKPIs(dados) {
             let totalPresenca = 0, totalMontagem = 0, totalDesmontagem = 0;
+            let diasTrabalhados = dados.length;
 
             dados.forEach(linha => {
                 totalPresenca += Number(linha.Presente) || 0;
@@ -96,12 +134,19 @@
             const totalHH = totalPresenca * 8.8;
             const producaoTotal = totalMontagem + totalDesmontagem;
             const stdMedio = producaoTotal > 0 ? (totalHH / producaoTotal) : 0;
+            
+            // Médias por homem/dia (considerando total de presença como homem-dia)
+            const mediaMontagemHomemDia = totalPresenca > 0 ? (totalMontagem / totalPresenca) : 0;
+            const mediaDesmontagemHomemDia = totalPresenca > 0 ? (totalDesmontagem / totalPresenca) : 0;
 
+            // Atualiza HTML
             document.getElementById('kpi-presenca').innerText = totalPresenca.toLocaleString('pt-BR');
             document.getElementById('kpi-hh').innerText = totalHH.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
             document.getElementById('kpi-montagem').innerText = totalMontagem.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
             document.getElementById('kpi-desmontagem').innerText = totalDesmontagem.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
             document.getElementById('kpi-std').innerText = stdMedio.toLocaleString('pt-BR', { maximumFractionDigits: 3 });
+            document.getElementById('kpi-media-montagem').innerText = mediaMontagemHomemDia.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + ' m';
+            document.getElementById('kpi-media-desmontagem').innerText = mediaDesmontagemHomemDia.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + ' m';
         }
 
         function gerarGrafico(dados) {
@@ -144,6 +189,26 @@
                         y: { beginAtZero: true }
                     }
                 }
+            });
+        }
+
+        function preencherTabela(dados) {
+            const tbody = document.querySelector('#tabela-dados tbody');
+            tbody.innerHTML = '';
+            
+            document.getElementById('total-registros').innerText = `${dados.length} registros`;
+
+            dados.forEach(linha => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors";
+                
+                tr.innerHTML = `
+                    <td class="p-3 border-b font-medium">${linha.Data || '-'}</td>
+                    <td class="p-3 border-b">${Number(linha.Presente || 0).toLocaleString('pt-BR')}</td>
+                    <td class="p-3 border-b text-green-600 font-semibold">${Number(linha.Montagem || 0).toLocaleString('pt-BR', { maximumFractionDigits: 1 })}</td>
+                    <td class="p-3 border-b text-orange-600 font-semibold">${Number(linha.Desmontagem || 0).toLocaleString('pt-BR', { maximumFractionDigits: 1 })}</td>
+                `;
+                tbody.appendChild(tr);
             });
         }
 
