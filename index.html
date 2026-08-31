@@ -4,75 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard de Produtividade - Andaimes</title>
-    <!-- Importando Tailwind para o visual -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Importando SheetJS para ler o Excel -->
+    <!-- SheetJS -->
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-    <!-- Importando Chart.js para gráficos -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans p-6">
+<body class="bg-slate-50 text-slate-800 font-sans p-4 md:p-8 min-h-screen">
 
     <div class="max-w-7xl mx-auto space-y-6">
-        <header class="flex justify-between items-center bg-white p-4 rounded-lg shadow">
-            <h1 class="text-2xl font-bold text-blue-900">Dashboard de Andaimes</h1>
-            <div id="status" class="text-sm font-semibold text-gray-500">Carregando dados...</div>
+        
+        <!-- Cabeçalho -->
+        <header class="flex flex-col md:flex-row justify-between items-center bg-white p-5 rounded-xl shadow-sm border border-slate-100">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800">Dashboard de Andaimes</h1>
+                <p class="text-sm text-slate-500 mt-1">Acompanhamento de produtividade e efetivo</p>
+            </div>
+            <div id="status" class="mt-4 md:mt-0 px-4 py-2 bg-slate-100 text-slate-600 rounded-full text-sm font-semibold flex items-center gap-2 transition-colors">
+                <svg class="animate-spin h-4 w-4 text-slate-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                Carregando dados...
+            </div>
         </header>
 
         <!-- Cards de KPIs -->
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4" id="kpi-container">
-            <div class="bg-white p-4 rounded-lg shadow border-l-4 border-blue-500">
-                <h3 class="text-sm text-gray-500">Efetivo (Presenças)</h3>
-                <p class="text-2xl font-bold" id="kpi-presenca">-</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-5" id="kpi-container">
+            
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-blue-500 hover:shadow-md transition-shadow relative overflow-hidden">
+                <h3 class="text-sm font-medium text-slate-500">Efetivo (Presenças)</h3>
+                <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-presenca">-</p>
             </div>
-            <div class="bg-white p-4 rounded-lg shadow border-l-4 border-indigo-500">
-                <h3 class="text-sm text-gray-500">Total HH</h3>
-                <p class="text-2xl font-bold" id="kpi-hh">-</p>
+            
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-indigo-500 hover:shadow-md transition-shadow">
+                <h3 class="text-sm font-medium text-slate-500">Total HH (Horas)</h3>
+                <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-hh">-</p>
             </div>
-            <div class="bg-white p-4 rounded-lg shadow border-l-4 border-green-500">
-                <h3 class="text-sm text-gray-500">Montagem (m)</h3>
-                <p class="text-2xl font-bold" id="kpi-montagem">-</p>
+            
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-green-500 hover:shadow-md transition-shadow">
+                <h3 class="text-sm font-medium text-slate-500">Montagem (m)</h3>
+                <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-montagem">-</p>
             </div>
-            <div class="bg-white p-4 rounded-lg shadow border-l-4 border-orange-500">
-                <h3 class="text-sm text-gray-500">Desmontagem (m)</h3>
-                <p class="text-2xl font-bold" id="kpi-desmontagem">-</p>
+            
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-orange-500 hover:shadow-md transition-shadow">
+                <h3 class="text-sm font-medium text-slate-500">Desmontagem (m)</h3>
+                <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-desmontagem">-</p>
             </div>
-            <div class="bg-white p-4 rounded-lg shadow border-l-4 border-red-500">
-                <h3 class="text-sm text-gray-500">STD Médio</h3>
-                <p class="text-2xl font-bold" id="kpi-std">-</p>
+            
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-red-500 hover:shadow-md transition-shadow">
+                <h3 class="text-sm font-medium text-slate-500">STD Médio</h3>
+                <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-std">-</p>
             </div>
+
         </div>
 
-        <!-- Área do Gráfico (Próxima etapa) -->
-        <div class="bg-white p-4 rounded-lg shadow">
-            <h2 class="text-lg font-bold mb-4">Produção Diária</h2>
-            <canvas id="meuGrafico" height="100"></canvas>
+        <!-- Área do Gráfico -->
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-slate-800">Evolução de Produção Diária</h2>
+            </div>
+            <div class="relative h-[400px] w-full">
+                <canvas id="meuGrafico"></canvas>
+            </div>
         </div>
     </div>
 
     <script>
-        // Função para carregar e processar o arquivo Excel
+        let chartInstance = null; // Guarda a instância do gráfico para poder atualizá-lo
+
         async function carregarDados() {
+            const statusBadge = document.getElementById('status');
+            
             try {
-                // Lê o arquivo do próprio repositório
                 const response = await fetch('./produção.xlsx');
+                if (!response.ok) throw new Error("Arquivo não encontrado");
+                
                 const arrayBuffer = await response.arrayBuffer();
                 
-                // Converte para JSON
+                // Converte para JSON. O raw: false ajuda a trazer as datas formatadas corretamente em vez de números de série do Excel.
                 const workbook = XLSX.read(arrayBuffer);
                 const sheetName = workbook.SheetNames[0];
-                const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+                const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { raw: false });
                 
                 processarKPIs(data);
-                document.getElementById('status').innerText = "Dados atualizados!";
-                document.getElementById('status').classList.replace('text-gray-500', 'text-green-600');
+                gerarGrafico(data);
+                
+                // Atualiza status visual
+                statusBadge.innerHTML = `<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Dados atualizados!`;
+                statusBadge.classList.replace('bg-slate-100', 'bg-green-100');
+                statusBadge.classList.replace('text-slate-600', 'text-green-700');
+                
             } catch (error) {
                 console.error("Erro ao ler arquivo:", error);
-                document.getElementById('status').innerText = "Erro ao carregar planilha.";
+                statusBadge.innerHTML = `<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Erro ao carregar planilha`;
+                statusBadge.classList.replace('bg-slate-100', 'bg-red-100');
+                statusBadge.classList.replace('text-slate-600', 'text-red-700');
             }
         }
 
-        // Função para calcular e exibir os totais
         function processarKPIs(dados) {
             let totalPresenca = 0, totalMontagem = 0, totalDesmontagem = 0;
 
@@ -86,7 +114,6 @@
             const producaoTotal = totalMontagem + totalDesmontagem;
             const stdMedio = producaoTotal > 0 ? (totalHH / producaoTotal) : 0;
 
-            // Atualiza o HTML
             document.getElementById('kpi-presenca').innerText = totalPresenca.toLocaleString('pt-BR');
             document.getElementById('kpi-hh').innerText = totalHH.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
             document.getElementById('kpi-montagem').innerText = totalMontagem.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
@@ -94,8 +121,62 @@
             document.getElementById('kpi-std').innerText = stdMedio.toLocaleString('pt-BR', { maximumFractionDigits: 3 });
         }
 
+        function gerarGrafico(dados) {
+            const ctx = document.getElementById('meuGrafico').getContext('2d');
+            
+            // Tenta usar a coluna 'Data' se existir, senão usa o índice da linha
+            const labels = dados.map((linha, index) => linha.Data ? linha.Data : `Dia ${index + 1}`);
+            const dadosMontagem = dados.map(linha => Number(linha.Montagem) || 0);
+            const dadosDesmontagem = dados.map(linha => Number(linha.Desmontagem) || 0);
+
+            // Destrói o gráfico anterior caso a função seja chamada mais de uma vez (ex: botão de atualizar)
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Montagem (m)',
+                            data: dadosMontagem,
+                            backgroundColor: 'rgba(34, 197, 94, 0.8)', // green-500
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Desmontagem (m)',
+                            data: dadosDesmontagem,
+                            backgroundColor: 'rgba(249, 115, 22, 0.8)', // orange-500
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { usePointStyle: true, boxWidth: 8 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { borderDash: [2, 4] }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
         // Inicia o processo quando a página abre
-        carregarDados();
+        document.addEventListener('DOMContentLoaded', carregarDados);
     </script>
 </body>
 </html>
