@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Produtividade - Andaimes</title>
+    <!-- Importando Tailwind para o visual -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Importando SheetJS para ler o Excel -->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <!-- Importando Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans p-6">
 
+    <div class="max-w-7xl mx-auto space-y-6">
+        <header class="flex justify-between items-center bg-white p-4 rounded-lg shadow">
+            <h1 class="text-2xl font-bold text-blue-900">Dashboard de Andaimes</h1>
+            <div id="status" class="text-sm font-semibold text-gray-500">Carregando dados...</div>
+        </header>
+
+        <!-- Cards de KPIs -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4" id="kpi-container">
+            <div class="bg-white p-4 rounded-lg shadow border-l-4 border-blue-500">
+                <h3 class="text-sm text-gray-500">Efetivo (Presenças)</h3>
+                <p class="text-2xl font-bold" id="kpi-presenca">-</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow border-l-4 border-indigo-500">
+                <h3 class="text-sm text-gray-500">Total HH</h3>
+                <p class="text-2xl font-bold" id="kpi-hh">-</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow border-l-4 border-green-500">
+                <h3 class="text-sm text-gray-500">Montagem (m)</h3>
+                <p class="text-2xl font-bold" id="kpi-montagem">-</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow border-l-4 border-orange-500">
+                <h3 class="text-sm text-gray-500">Desmontagem (m)</h3>
+                <p class="text-2xl font-bold" id="kpi-desmontagem">-</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow border-l-4 border-red-500">
+                <h3 class="text-sm text-gray-500">STD Médio</h3>
+                <p class="text-2xl font-bold" id="kpi-std">-</p>
+            </div>
+        </div>
+
+        <!-- Área do Gráfico (Próxima etapa) -->
+        <div class="bg-white p-4 rounded-lg shadow">
+            <h2 class="text-lg font-bold mb-4">Produção Diária</h2>
+            <canvas id="meuGrafico" height="100"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Função para carregar e processar o arquivo Excel
+        async function carregarDados() {
+            try {
+                // Lê o arquivo do próprio repositório
+                const response = await fetch('./produção.xlsx');
+                const arrayBuffer = await response.arrayBuffer();
+                
+                // Converte para JSON
+                const workbook = XLSX.read(arrayBuffer);
+                const sheetName = workbook.SheetNames[0];
+                const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+                
+                processarKPIs(data);
+                document.getElementById('status').innerText = "Dados atualizados!";
+                document.getElementById('status').classList.replace('text-gray-500', 'text-green-600');
+            } catch (error) {
+                console.error("Erro ao ler arquivo:", error);
+                document.getElementById('status').innerText = "Erro ao carregar planilha.";
+            }
+        }
+
+        // Função para calcular e exibir os totais
+        function processarKPIs(dados) {
+            let totalPresenca = 0, totalMontagem = 0, totalDesmontagem = 0;
+
+            dados.forEach(linha => {
+                totalPresenca += Number(linha.Presente) || 0;
+                totalMontagem += Number(linha.Montagem) || 0;
+                totalDesmontagem += Number(linha.Desmontagem) || 0;
+            });
+
+            const totalHH = totalPresenca * 8.8;
+            const producaoTotal = totalMontagem + totalDesmontagem;
+            const stdMedio = producaoTotal > 0 ? (totalHH / producaoTotal) : 0;
+
+            // Atualiza o HTML
+            document.getElementById('kpi-presenca').innerText = totalPresenca.toLocaleString('pt-BR');
+            document.getElementById('kpi-hh').innerText = totalHH.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
+            document.getElementById('kpi-montagem').innerText = totalMontagem.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
+            document.getElementById('kpi-desmontagem').innerText = totalDesmontagem.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
+            document.getElementById('kpi-std').innerText = stdMedio.toLocaleString('pt-BR', { maximumFractionDigits: 3 });
+        }
+
+        // Inicia o processo quando a página abre
+        carregarDados();
+    </script>
+</body>
+</html>
