@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071d2e">
+  <meta name="description" content="Engenharia Digital - controle operacional de andaimes, efetivo, produção e programação.">
+  <title>Engenharia em Dados | Controle de Andaimes</title>
+  <link rel="icon" href="assets/logo-enesa.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#visao-geral" aria-label="Engenharia em Dados">
+        <span class="brand-mark"><img src="assets/logo-enesa.png" alt="ENESA"></span>
+        <span><strong>Engenharia em Dados</strong><small>Gestão de Andaimes</small></span>
+      </a>
+      <nav class="nav" aria-label="Navegação principal">
+        <button class="nav-link active" data-view="visao-geral"><span>◫</span> Visão geral</button>
+        <button class="nav-link" data-view="efetivo"><span>♙</span> Efetivo</button>
+        <button class="nav-link" data-view="producao"><span>↗</span> Produção</button>
+        <button class="nav-link" data-view="programacao"><span>▦</span> Programação</button>
+        <button class="nav-link" data-view="registros"><span>✓</span> Registros</button>
+      </nav>
+      <div class="side-spacer"></div>
+      <button class="login-card" id="openLogin">
+        <span class="status-dot"></span>
+        <span><strong>Área de lançamento</strong><small>Acessar painel operacional</small></span>
+        <span aria-hidden="true">→</span>
+      </button>
+      <div class="sidebar-note"><span class="status-dot"></span><div><strong>Modo demonstração</strong><small>Base S27 a S39</small></div></div>
+    </aside>
+
+    <main class="main">
+      <header class="mobile-header">
+        <button id="menuToggle" class="icon-btn" aria-label="Abrir menu">☰</button>
+        <strong>Engenharia em Dados</strong>
+        <button class="icon-btn" id="mobileLogin" aria-label="Acessar lançamentos">↗</button>
+      </header>
+
+      <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <span class="eyebrow">PROJETO +20 MTPA • PACOTE 12445B</span>
+          <h1>Controle de Produção<br>de Andaimes</h1>
+          <p>Efetivo, absenteísmo, produtividade e avanço da programação em uma única visão operacional.</p>
+          <div class="hero-badges"><span>● S27 a S39</span><span>Meta: 42 ML/MOD/dia</span></div>
+        </div>
+        <div class="client-logos"><img src="assets/logo-enesa.png" alt="ENESA"><i></i><img src="assets/logo-vale.png" alt="Vale"></div>
+      </section>
+
+      <section class="content view active" id="visao-geral">
+        <div class="section-head"><div><span class="eyebrow blue">PAINEL OPERACIONAL</span><h2>Visão consolidada</h2></div><div class="updated"><small>ÚLTIMA DATA DA BASE</small><strong>26/09/2026</strong></div></div>
+        <div class="filter-card">
+          <label>SEMANA<select id="weekFilter"><option value="all">Todas as semanas</option><option>S39</option><option>S38</option><option>S37</option><option>S36</option></select></label>
+          <label>ENCARREGADO<select><option>Todos os encarregados</option><option>Cleber Sacramento</option><option>Giles da Silva</option><option>Denivaldo de Jesus</option></select></label>
+          <label>TURNO<select><option>Todos os turnos</option><option>Diurno</option><option>Noturno</option></select></label>
+          <label>DE<input type="date" value="2026-09-21"></label>
+          <label>ATÉ<input type="date" value="2026-09-26"></label>
+          <button class="btn dark" id="clearFilters">Limpar filtros</button>
+        </div>
+        <div class="kpi-grid" id="kpiGrid"></div>
+        <div class="dashboard-grid">
+          <article class="panel span-2"><div class="panel-title"><div><span class="eyebrow blue">EFETIVO</span><h3>Planejado × Presente × Faltas</h3></div><small>visão semanal</small></div><div class="chart" id="peopleChart"></div></article>
+          <article class="panel"><div class="panel-title"><div><span class="eyebrow blue">META OPERACIONAL</span><h3>Desempenho médio</h3></div></div><div class="gauge-wrap"><div class="gauge" id="gauge"><span><strong id="gaugeValue">103%</strong><small>da meta</small></span></div><div class="legend-row"><span><i class="green"></i>43,2 realizado</span><span><i class="gray"></i>42 meta</span></div></div></article>
+          <article class="panel span-2"><div class="panel-title"><div><span class="eyebrow blue">PRODUÇÃO</span><h3>Montagem × Desmontagem</h3></div><span class="unit">ML</span></div><div class="chart" id="productionChart"></div></article>
+          <article class="panel"><div class="panel-title"><div><span class="eyebrow blue">STATUS S39</span><h3>Leitura executiva</h3></div></div><div class="insights"><div class="insight good"><b>+2,9%</b><span>acima da meta de produtividade</span></div><div class="insight warn"><b>12,2%</b><span>absenteísmo dentro da faixa de atenção</span></div><div class="insight"><b>28,1%</b><span>da produção foi desmontagem</span></div></div></article>
+        </div>
+      </section>
+
+      <section class="content view" id="efetivo">
+        <div class="section-head"><div><span class="eyebrow blue">GESTÃO DE PESSOAS</span><h2>Efetivo de Andaimes</h2><p>Distribuição da equipe por função e turno.</p></div></div>
+        <div class="kpi-grid compact"><div class="kpi"><span>CADASTRO ATUAL</span><strong>230</strong><small>colaboradores ativos</small></div><div class="kpi"><span>MONTADORES</span><strong>207</strong><small>90% do efetivo</small></div><div class="kpi"><span>ENCARREGADOS</span><strong>19</strong><small>liderança direta</small></div><div class="kpi"><span>NOTURNO</span><strong>54</strong><small>2º e 3º turnos</small></div></div>
+        <article class="panel"><div class="panel-title"><div><span class="eyebrow blue">EQUIPES</span><h3>Distribuição por turno</h3></div></div><div class="turn-grid"><div><b>176</b><span>1º Turno</span><progress value="176" max="230"></progress></div><div><b>45</b><span>2º Turno</span><progress value="45" max="230"></progress></div><div><b>9</b><span>3º Turno</span><progress value="9" max="230"></progress></div></div></article>
+      </section>
+
+      <section class="content view" id="producao">
+        <div class="section-head"><div><span class="eyebrow blue">DESEMPENHO</span><h2>Produção e produtividade</h2><p>Acompanhamento por semana com montagem e desmontagem separadas.</p></div></div>
+        <div class="kpi-grid compact"><div class="kpi featured"><span>PRODUÇÃO S39</span><strong>47.106</strong><small>metros lineares</small></div><div class="kpi"><span>MONTAGEM</span><strong>33.862</strong><small>71,9% do total</small></div><div class="kpi"><span>DESMONTAGEM</span><strong>13.244</strong><small>28,1% do total</small></div><div class="kpi"><span>STD</span><strong>0,22</strong><small>HH/ML estimado</small></div></div>
+        <article class="panel"><div class="panel-title"><div><span class="eyebrow blue">TENDÊNCIA</span><h3>Produtividade por semana</h3></div><span class="pill success">Meta 42</span></div><div class="chart tall" id="productivityChart"></div></article>
+      </section>
+
+      <section class="content view" id="programacao">
+        <div class="section-head"><div><span class="eyebrow blue">SEMANA 39</span><h2>Programação operacional</h2><p>Principais frentes extraídas da programação semanal.</p></div><button class="btn" id="exportCsv">Exportar CSV</button></div>
+        <div class="table-card"><div class="table-toolbar"><input id="activitySearch" type="search" placeholder="Buscar atividade, local ou encarregado..."><span>6 atividades em destaque</span></div><div class="table-wrap"><table><thead><tr><th>ID</th><th>Atividade</th><th>Local</th><th>Responsável</th><th>Turno</th><th>Status</th></tr></thead><tbody id="activityTable"></tbody></table></div></div>
+      </section>
+
+      <section class="content view" id="registros">
+        <div class="section-head"><div><span class="eyebrow blue">RASTREABILIDADE</span><h2>Registros operacionais</h2><p>Lançamentos salvos neste navegador durante a demonstração.</p></div><button class="btn primary" id="newRecord">+ Novo registro</button></div>
+        <div class="table-card"><div class="table-wrap"><table><thead><tr><th>Data</th><th>Encarregado</th><th>Turno</th><th>Planejado</th><th>Faltas</th><th>Montagem</th><th>Desmontagem</th><th>Status</th></tr></thead><tbody id="recordTable"></tbody></table></div></div>
+      </section>
+      <footer><span>Engenharia em Dados • Controle de Andaimes</span><span>Projeto demonstrativo para validação operacional</span></footer>
+    </main>
+  </div>
+
+  <dialog id="loginDialog" class="modal"><form method="dialog" id="loginForm"><button class="modal-close" value="cancel" aria-label="Fechar">×</button><img src="assets/logo-enesa.png" alt="ENESA"><span class="eyebrow blue">ACESSO OPERACIONAL</span><h2>Área de lançamento</h2><p>Protótipo local para testar o fluxo antes da integração com o banco de dados.</p><label>Usuário<input name="user" autocomplete="username" value="planejamento"></label><label>Senha<input name="password" type="password" autocomplete="current-password" placeholder="Digite engenharia2026"></label><small class="form-note">Demonstração: planejamento / engenharia2026</small><div id="loginError" class="error"></div><button class="btn primary full" value="default">Entrar</button></form></dialog>
+
+  <dialog id="recordDialog" class="modal wide"><form method="dialog" id="recordForm"><button class="modal-close" value="cancel" aria-label="Fechar">×</button><span class="eyebrow blue">APONTAMENTO DIÁRIO</span><h2>Novo registro</h2><div class="form-grid"><label>Data<input name="date" type="date" required></label><label>Encarregado<input name="leader" required placeholder="Nome do encarregado"></label><label>Turno<select name="shift"><option>Diurno</option><option>Noturno</option></select></label><label>Efetivo planejado<input name="planned" type="number" min="0" required></label><label>Faltas<input name="absent" type="number" min="0" required></label><label>Montagem (ML)<input name="assembly" type="number" min="0" step="0.01" required></label><label>Desmontagem (ML)<input name="disassembly" type="number" min="0" step="0.01" required></label></div><div class="modal-actions"><button class="btn" value="cancel">Cancelar</button><button class="btn primary" value="default">Salvar registro</button></div></form></dialog>
+  <div class="toast" id="toast"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
